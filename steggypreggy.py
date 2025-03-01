@@ -4,7 +4,7 @@ import random
 import urllib.parse
 from PIL import Image, ImageSequence
 
-def embed_data_random_frame(input_gif, output_gif, data_file):
+def fertilize_data(input_gif, output_gif, data_file):
     """Embed URL-encoded JSON data into a random frame of a GIF using LSB steganography."""
     with open(data_file, "rb") as file:
         raw_data = file.read().decode("utf-8", errors="ignore")
@@ -37,10 +37,10 @@ def embed_data_random_frame(input_gif, output_gif, data_file):
             frames.append(frame.copy())
 
     frames[0].save(output_gif, save_all=True, append_images=frames[1:], loop=gif.info.get("loop", 0), duration=gif.info.get("duration", 100))
-    print(f"✅ Data successfully embedded in frame {random_frame_index} of {output_gif}")
+    print(f"🥚 Gif Fertilized in frame {random_frame_index} of {output_gif}")
 
-def extract_data_random_frame(input_gif):
-    """Extract URL-encoded JSON data from a GIF and properly decode it before saving."""
+def harvest_data(input_gif):
+    """Harvest URL-encoded JSON data from a GIF and properly decode it before saving."""
     gif = Image.open(input_gif)
 
     for i, frame in enumerate(ImageSequence.Iterator(gif)):
@@ -58,45 +58,45 @@ def extract_data_random_frame(input_gif):
                 encoded_data = binary_data[40:40 + (data_length * 8)]
                 decoded_data = "".join(chr(int(encoded_data[j:j + 8], 2)) for j in range(0, len(encoded_data), 8))
 
-                # ✅ **URL Decode the extracted JSON data before writing it**
-                extracted_json = urllib.parse.unquote(decoded_data)
+                harvested_json = urllib.parse.unquote(decoded_data)
 
                 try:
-                    json_data = json.loads(extracted_json)  # Properly load JSON
-                    output_file = "extracted_data.json"
+                    json_data = json.loads(harvested_json)
+                    output_file = "harvested_data.json"
                     with open(output_file, "w", encoding="utf-8") as f:
-                        json.dump(json_data, f, indent=4, ensure_ascii=False)  # Ensure correct character representation
-                    print(f"✅ Extracted data successfully saved to {output_file}")
+                        json.dump(json_data, f, indent=4, ensure_ascii=False)
+                    print(f"🐣 harvested data successfully to {output_file}")
                     return json_data
-                except json.JSONDecodeError:
-                    continue
+                except json.JSONDecodeError as e:
+                    print(f"💩 JSON decoding failed: {e}")
+                    return None
 
             except (ValueError, json.JSONDecodeError):
                 continue
 
-    print("❌ No valid URL-encoded data found in any frame.")
+    print("💩 No data found in any frame.")
     return None
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="SteggyPreggy - Embed or extract URL-encoded JSON data in a GIF!")
+    parser = argparse.ArgumentParser(description="SteggyPreggy - Make your gif datapreggers!")
 
-    parser.add_argument("-e", "--embed", help="Embed data into a GIF", action="store_true")
-    parser.add_argument("-d", "--decode", help="Extract data from a GIF", action="store_true")
-    parser.add_argument("-i", "--input", help="Input JSON file (for embedding) or GIF file (for extraction)", required=True)
-    parser.add_argument("-f", "--file", help="Input GIF file (used when embedding)")
-    parser.add_argument("-o", "--output", help="Output GIF file (default: cat-crypt.gif)", default="cat-crypt.gif")
+    parser.add_argument("-e", "--embed", help="Fertilize your gif with data", action="store_true")
+    parser.add_argument("-d", "--decode", help="Harvest data from a GIF", action="store_true")
+    parser.add_argument("-i", "--input", help="Input JSON file", required=True)
+    parser.add_argument("-f", "--file", help="Input GIF file to pregger")
+    parser.add_argument("-o", "--output", help="Output GIF file (default: skelly_crypt.gif)", default="skelly_crypt.gif")
 
     args = parser.parse_args()
 
     if args.embed:
         if not args.file:
-            print("❌ Error: You must specify a GIF file with `-f` when embedding.")
+            print("💩 Error: You must specify a GIF file with `-f` when fertilizing.")
         else:
-            embed_data_random_frame(args.file, args.output, args.input)
+            fertilize_data(args.file, args.output, args.input)
 
     elif args.decode:
-        extract_data_random_frame(args.input)
+        harvest_data(args.input)
 
     else:
-        print("❌ Error: You must specify either `-e` for embedding or `-d` for extraction.")
+        print("💩 Error: You must specify either `-e` for fertilizing or `-d` for harvesting.")
         parser.print_help()

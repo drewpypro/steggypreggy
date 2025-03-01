@@ -11,10 +11,10 @@
 # git clone https://github.com/drewpypro/steggypreggy
 # cd steggypreggy
 # python3 steggypreggy.py -e -i data.json -f skeleton.gif -o skelly_crypt.gif
-✅ Data successfully embedded in frame 13 of skelly_crypt.gif
+🥚 Gif Fertilized in frame 36 of skelly_crypt.gif
 # python3 steggypreggy.py -d -i skelly_crypt.gif
-✅ Extracted data successfully saved to extracted_data.json
-# cat extracted_data.json
+🐣 harvested data successfully to harvested_data.json
+# cat harvested_data.json
 [
     "mysecretisinmygif"
 ]
