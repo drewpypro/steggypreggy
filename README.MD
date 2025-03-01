@@ -1,4 +1,5 @@
 # steggypreggy 
+![steggypreggy](eggydatapreggy.png)
 
 # Purpose
 - Fertilize gifs with json data. 🥚
